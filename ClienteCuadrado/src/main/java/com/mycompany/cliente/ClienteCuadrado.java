@@ -1,40 +1,36 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- */
-
 package com.mycompany.cliente;
 
 import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.io.OutputStream;
 import java.io.PrintWriter;
 import java.net.Socket;
+import java.util.Scanner;
 
-/**
- *
- * @author Admin
- */
 public class ClienteCuadrado {
 
     public static void main(String[] args) {
-        try{
+        try (
             Socket socket = new Socket("localhost", 5000);
-            System.out.println("Se ha conectado al servidor");
-            
-            InputStream inputStream = socket.getInputStream();
-            OutputStream outputStream = socket.getOutputStream();
-            PrintWriter writer = new PrintWriter(outputStream,true);
-            BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream));            
-     
-            writer.println("Cliente A");
-            String res = reader.readLine();
-            
-            System.out.println("Respuesta del servidor: " + res);
+            PrintWriter writer = new PrintWriter(socket.getOutputStream(), true);
+            BufferedReader reader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+            Scanner scanner = new Scanner(System.in)
+        ) {
+            System.out.println("Conectado al servidor.");
+            System.out.print("Ingrese su nombre: ");
+            String nombre = scanner.nextLine();
+            System.out.print("Ingrese un numero entero: ");
+            int numero = scanner.nextInt();
+            writer.println(nombre);
+            writer.println(numero);
+            String respuesta1 = reader.readLine();
+            String respuesta2 = reader.readLine();
+            String respuesta3 = reader.readLine();
+            System.out.println(respuesta1);
+            System.out.println(respuesta2);
+            System.out.println(respuesta3);
 
-            socket.close();
-        }catch(IOException e){
-        System.out.println(e);}
+        } catch (Exception e) {
+            System.out.println("Error: " + e.getMessage());
+        }
     }
 }
