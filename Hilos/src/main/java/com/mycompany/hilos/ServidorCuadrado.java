@@ -1,33 +1,24 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- */
-
 package com.mycompany.hilos;
 
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
 
-/**
- *
- * @author Admin
- */
 public class ServidorCuadrado {
 
     public static void main(String[] args) {
-        try{
+        try {
             ServerSocket serverSocket = new ServerSocket(5000);
-            System.out.println("Server esperando conexiones...");
-            
-            while(true){
+            System.out.println("Servidor conectado en el puerto 5000");
+
+            while (true) {
                 Socket socketCliente = serverSocket.accept();
-                System.out.println("Direccion del cliente: " 
-                        + socketCliente.getInetAddress());
-                new Thread(new ManejadorCliente(socketCliente)).start();
+                Thread hilo = new Thread(new ManejadorCliente(socketCliente));
+                hilo.start();
             }
-        }catch(IOException e){
-            System.out.println(e);
+
+        } catch (IOException e) {
+            System.out.println("Error en el servidor: " + e.getMessage());
         }
-        
     }
 }
